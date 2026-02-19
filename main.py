@@ -10,15 +10,15 @@ import ssd1306
 gc.collect()
 
 # ===== WIFI =====
-SSID = "Luyen"
-PASSWORD = "03041979"
+SSID = "YOUR_WIFI"
+PASSWORD = "YOUR_PASSWORD"
 
 # ===== TẮT AP MODE =====
 ap = network.WLAN(network.AP_IF)
 ap.active(False)
 
 # ===== OLED =====
-i2c = I2C(scl=Pin(12), sda=Pin(14))
+i2c = I2C(scl=Pin(YOUR_SCL), sda=Pin(YOUR_SDA))
 oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 
 # ===== WATCHDOG =====
@@ -169,7 +169,7 @@ def sync_time():
 
 def get_temperature():
     try:
-        url = "http://api.open-meteo.com/v1/forecast?latitude=20.940111&longitude=106.33308&current_weather=true"
+        url = "YOUR_API"
         r = urequests.get(url)
         data = r.json()
         r.close()
@@ -275,8 +275,9 @@ while True:
         oled.pixel(x_deg+1, y_deg+3, 1)
         oled.pixel(x_deg+2, y_deg+3, 1)
 
-        oled.text("C - TPHD", x_deg+6, 54)
+        oled.text("C", x_deg+6, 54)
 
         oled.show()
 
     time.sleep_ms(50)
+
