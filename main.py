@@ -9,24 +9,16 @@ import ssd1306
 
 gc.collect()
 
-# ===== WIFI =====
 SSID = "YOUR_WIFI"
 PASSWORD = "YOUR_PASSWORD"
 
-# ===== TẮT AP MODE =====
 ap = network.WLAN(network.AP_IF)
 ap.active(False)
 
-# ===== OLED =====
 i2c = I2C(scl=Pin(YOUR_SCL), sda=Pin(YOUR_SDA))
 oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 
-# ===== WATCHDOG =====
 wdt = WDT()
-
-# =================================================
-# ===== CLEAN ROUNDED PROGRESS BOOT ==============
-# =================================================
 
 def glitch_boot():
 
@@ -89,7 +81,6 @@ def glitch_boot():
     oled.show()
     time.sleep(0.15)
 
-    # ===== FLASH CUỐI =====
     for _ in range(2):
         wdt.feed()
         oled.invert(1)
@@ -99,17 +90,11 @@ def glitch_boot():
         oled.show()
         time.sleep(0.08)
 
-    # Xóa màn hình và thoát
     oled.fill(0)
     oled.show()
     time.sleep(0.2)
 
-# Gọi boot
 glitch_boot()
-
-# =================================================
-# ===== FONT SỐ LỚN ==============================
-# =================================================
 
 font = {
     "0":[0x3C,0x66,0x6E,0x76,0x66,0x66,0x3C,0x00],
@@ -138,10 +123,6 @@ def draw_big_digit(x, y, num, scale=3):
                     1
                 )
 
-# =================================================
-# ===== WIFI CONNECT =============================
-# =================================================
-
 def connect_wifi():
     wifi = network.WLAN(network.STA_IF)
     wifi.active(True)
@@ -155,10 +136,6 @@ def connect_wifi():
     return wifi
 
 wifi = connect_wifi()
-
-# =================================================
-# ===== TIME + WEATHER ===========================
-# =================================================
 
 def sync_time():
     try:
@@ -190,10 +167,6 @@ def get_vn_time():
 
 weekdays = ["Th2","Th3","Th4","Th5","Th6","Th7","CN"]
 last_second = -1
-
-# =================================================
-# ================= MAIN LOOP ====================
-# =================================================
 
 while True:
 
@@ -251,21 +224,18 @@ while True:
             draw_big_digit(x, y_pos, ch, scale)
             x += digit_w + spacing
 
-        # ===== DATE =====
         date_line = "{} {:02d}/{:02d}/{}".format(
             weekdays[t[6]], t[2], t[1], t[0]
         )
         date_x = (128 - len(date_line)*8) // 2
         oled.text(date_line, date_x, 8)
 
-        # ===== TEMPERATURE =====
         oled.text(temperature, 4, 54)
 
         temp_width = len(temperature) * 8
         x_deg = 4 + temp_width + 2
         y_deg = 54
 
-        # Dấu độ tròn
         oled.pixel(x_deg+1, y_deg, 1)
         oled.pixel(x_deg+2, y_deg, 1)
         oled.pixel(x_deg, y_deg+1, 1)
@@ -280,4 +250,5 @@ while True:
         oled.show()
 
     time.sleep_ms(50)
+
 
